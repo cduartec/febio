@@ -2,9 +2,9 @@ FEBio- Camilo
 ===================
 
 This repository corresponds to the [FEBio](https://febio.org/) application of [Camilo A. Duarte-Cordon](https://scholar.google.com/citations?user=d1GtGzgAAAAJ&hl=en). The repository contains the following folders:
-
+git
 * Examples: [examples](./examples)
-* Monkey cervix, indentation model - steady state: [indentation_static](./monkey_cervix/cervix/indentation_static)
+* Monkey cervix, indentation model - steady state: [indentation_static](./monkey_cervix/indentation_static)
 * Monkey cervix, indentation poroviscoelastic model - dynamic: [indentation_dyn](./monkey_cervix/indentation_dyn)
 
 Please send an e-mail to [caduarteco@gmail.com](mailto:caduarteco@gmail.com)  if you have any questions.
