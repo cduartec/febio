@@ -99,7 +99,7 @@ for s,suff in enumerate(fsuff):
 #-------------------------------------------------------
 # Load Experiment Results
 #-------------------------------------------------------
-    folder = './../Mnky/' + fexp + '/' + fexp + fpos + '/'+ ffolder[s] + '/' + fexp + fpos + suff + '.is_tcyclic_RawData/'
+    folder = './raw_data/' + fexp + '/' + fexp + fpos + '/'+ ffolder[s] + '/' + fexp + fpos + suff + '.is_tcyclic_RawData/'
     exp_data = []
     print('Reading data')
     if suff =='I':

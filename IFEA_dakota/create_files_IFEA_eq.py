@@ -23,7 +23,6 @@ from pathlib import Path
 
 #monkeys = ['r05038','r11091','r11087','rh2825']
 monkeys = ['r05038','r11091','r11087','rh2825','r17003','r08059','r05050','r09059','r01047','rh2509','r10093','r0039']
-
 samples = ['CXEOQ1','CXEOQ2','CXEOQ3','CXEOQ4','CXIOQ1','CXIOQ2','CXIOQ3','CXIOQ4']
 files = ['calibration_eq_IT.in','calibration_eq_IT.py','calibration_eq_IT.sh']
 
