@@ -24,12 +24,15 @@ To use this app in HPC follow the next instructions:
 * Create an alias to the febio executable in your bash profile:
 
   >> vi ~/.bashrc
+
   >> alias febio='/burg/myers/projects/febio/febio35/bin/febio3'
 
   Add the following lines to use Dakota:
 
   >> INSTALL_DIR=/burg/myers/projects/dakota/dakota-6.17.0
+
   >> export PATH=$INSTALL_DIR/bin:$INSTALL_DIR/share/dakota/test:$INSTALL_DIR/gui:$PATH
+
   >> export PYTHONPATH=$PYTHONPATH:$INSTALL_DIR/share/dakota/Python/dakota
 
   Restart the shell to make changes active.
