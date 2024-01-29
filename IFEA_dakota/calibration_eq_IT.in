@@ -1,0 +1,102 @@
+#### SAMPLE r05038CXEOQ1
+#### SPECIFY THE ENVIRONMENT ####
+environment
+  top_method_pointer = 'HS'
+  tabular_data
+    tabular_data_file = 'dakota_tabular.txt'
+  error_file "dakota.err"
+  output_file "dakota.out"
+  write_restart "dakota.rst"
+
+#### DEFINE HYBRID METHOD ####
+method
+  id_method = 'HS'
+  hybrid sequential
+  method_pointer_list= 'EGO' 'NLP'
+
+#### DEFINE GLOBAL OPTIMIZATION METHOD ####
+method
+  id_method = 'EGO'
+  efficient_global
+    initial_samples = 50
+    convergence_tolerance = 1e-9
+    x_conv_tol = 1e-9
+    max_iterations = 2000
+    seed = 123457
+    model_pointer = 'M1'
+  output quiet
+
+#### DEFINE NL2SOL METHOD ####
+method
+  id_method = 'NLP'
+  nl2sol
+    max_iterations = 100
+    convergence_tolerance = 1e-9
+    model_pointer = 'M2'
+  scaling
+  output debug
+
+#### DEFINE MODELS ####
+
+model
+  id_model = 'M1'
+  single
+    interface_pointer = 'I1'
+  variables_pointer = 'V1'
+  responses_pointer = 'R1'
+
+model
+  id_model = 'M2'
+  single
+    interface_pointer = 'I1'
+  variables_pointer = 'V1'
+  responses_pointer = 'R2'
+
+#### DEFINE VARIABLES ####
+#### Calibration variables ####
+variables
+  id_variables 'V1'
+  continuous_design = 4 #Design variables
+    lower_bounds      1.0e-4    0.0  1.0e-3    1.e-6
+    upper_bounds      1.0e-1   0.499    1.0    10.0
+    descriptors    'E'  'v'  'ksi'  'alpha'
+    scale_types= 'log' 'auto' 'log' 'auto'
+    #units MPa  NA MPa NA
+
+#### Constant variables ####
+  continuous_state = 1
+    initial_state  2.0
+    descriptors    'beta'
+    #units  NA
+
+#### DEFINE THE DAKOTA - SIMULATION INTERFACE ####
+interface
+  id_interface = 'I1'
+  fork
+     analysis_driver = 'python3 calibration_eq_IT.py'
+
+### DEFINE THE RESPONSE VARIALES ####
+responses
+  id_responses = 'R1'
+  calibration_terms = 6 # Number of experimental data
+  descriptors 'Ind01'
+              'Ind02'
+              'Ind03'
+              'Ten01'
+              'Ten02'
+              'Ten03'
+  no_gradients
+  no_hessians
+
+responses
+  id_responses = 'R2'
+  calibration_terms = 6 # Number of experimental data
+  descriptors 'Ind01'
+              'Ind02'
+              'Ind03'
+              'Ten01'
+              'Ten02'
+              'Ten03'
+  numerical_gradients
+    fd_step_size = 0.01
+  no_hessians

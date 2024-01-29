@@ -1,0 +1,28 @@
+*Step  = 1
+*Time  = 0.1
+*Data  = ux;uy;uz
+246 0 0 0.1125
+*Step  = 2
+*Time  = 0.246
+*Data  = ux;uy;uz
+246 0 0 0.27675
+*Step  = 3
+*Time  = 0.33
+*Data  = ux;uy;uz
+246 0 0 0.37125
+*Step  = 4
+*Time  = 0.54424
+*Data  = ux;uy;uz
+246 0 0 0.61227
+*Step  = 5
+*Time  = 0.67
+*Data  = ux;uy;uz
+246 0 0 0.75375
+*Step  = 6
+*Time  = 0.9275136
+*Data  = ux;uy;uz
+246 0 0 1.0434528
+*Step  = 7
+*Time  = 1
+*Data  = ux;uy;uz
+246 0 0 1.125
