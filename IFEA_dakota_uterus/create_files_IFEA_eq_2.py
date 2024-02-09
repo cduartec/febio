@@ -51,7 +51,7 @@ for i in range(len(samples)):
 
 print('Create FEBio files')
 print('Indentation')
-
+:q
 for i in range(len(samples)):
     folder_in = './' + samples[i] + '/'
     my_file = Path(folder_in + samples[i] + 'I.feb')

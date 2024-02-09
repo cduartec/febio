@@ -31,7 +31,7 @@ fpre             = [1.0,1.0]
 time_steps_sim_I = [0.5,0.75,1.0] # Time steps simulations of interest Indentation
 time_steps_sim_T = [0.33,0.67,1.0] # Time steps simulations of interest Tension
 time_steps_sim   = [time_steps_sim_I, time_steps_sim_T]
-fweig            = [0.5,0.5]
+fweig            = [1.0,1.0]
 
 # Assign parameters from Dakota in extracted order
 param            = ['N','ksi','kappa','b']
@@ -87,7 +87,7 @@ if n != sum(n_fnc): # Check the number of experimental data
 # Objective function
 objct = zeros((sum(n_fnc)))
 
-
+status_sim = 'OK'
 for s,suff in enumerate(fsuff):
 #-------------------------------------------------------
 # Load Experiment Results
@@ -103,7 +103,7 @@ for s,suff in enumerate(fsuff):
     else:
         # Extract data at time steps of interest
         p_exp = file_exp.TF
-    
+
 #-------------------------------------------------------
 # Load Simulation Results
 #-------------------------------------------------------
@@ -114,7 +114,7 @@ for s,suff in enumerate(fsuff):
                 if '<' + p + '>' in line:
                     line = re.sub(r'\d+\.\d+', str(x[i]), line)
             if j > 34 and j < 38:
-                if '<ksi>' in line: 
+                if '<ksi>' in line:
                     line = re.sub(r'\d+\.\d+', str(0.00001), line)
             fout.write(line.encode('utf8'))
         os.rename(fout.name, './{}'.format(fexp + '_' + fsuff[s] + '.feb'))
@@ -124,31 +124,30 @@ for s,suff in enumerate(fsuff):
     running_command = 'mpiexec /burg/myers/projects/febio/febio2/bin/febio2 {}'.format(fexp + '_' + fsuff[s] + '.feb')
     #os.chdir('./feb_files/')
     os.system(running_command)
-   
-    # If simulation doesn't converge assign force values as zero
-    if os.path.getsize("./force.txt") == 0:
-        print('file is empty')
-        p_sim = np.zeros(3)
-    else:
+    
+    # Checking if simulation failed 
+    with open(fexp + '_' + fsuff[s]+'.log') as f:
+        for line in f:
+            if "E R R O R   T E R M I N A T I O N" in line:
+                status_sim = 'FAIL'
+    print(status_sim)   
+    if status_sim == 'OK':
         # Obtain simulations results from febio
         sim_data = exp.extract_sim_data('./','force.txt','disp.txt')
         sim_data = exp.load_data(sim_data, time_steps_sim[s])
-        # if simulation chrashed  
-        if len(sim_data.fz) == len(p_exp):
-            p_sim = fpre[s]*sim_data.fz
-        else:
-            print('file is incomplete')
-            p_sim = np.zeros(3)
-                
+        # Simulation data
+        p_sim = fpre[s]*sim_data.fz
+        # Delete results
+        os.system('rm ./disp.txt')
+        os.system('rm ./force.txt')
+    else:
+        p_sim = np.zeros(len(time_steps_sim[s]))
+        p_sim[:] = np.nan
+        # Delete results
+        os.system('rm ./disp.txt')
+        os.system('rm ./force.txt')
             
-        
-        
-            
-    # Delete results
-    os.system('rm ./disp.txt')
-    os.system('rm ./force.txt')
-    os.system('rm ./strains.txt')
-    #os.chdir('./../')
+             
 
 #-------------------------------------------------------
 # Objective Function
@@ -167,8 +166,13 @@ for i in range(n):
   line = In.readline().lstrip()
   print(line)
   asv[i] = k = int(line[0:line.find(" ")])
-  if k & 1:
-    print (objct[i],file=Out) # Pass objective function
-
+  if status_sim == 'OK':
+      if k & 1:
+          print (objct[i],file=Out) # Pass objective function
+  else:
+      print ('FAIL',file=Out)
+      if k & 1:
+          print (objct[i],file=Out) # Pass objective function
+      
 In.close()
 Out.close()

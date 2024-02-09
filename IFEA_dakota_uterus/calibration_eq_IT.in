@@ -18,11 +18,11 @@ method
 method
   id_method = 'EGO'
   efficient_global
-    initial_samples = 50
-    convergence_tolerance = 1e-9
-    x_conv_tol = 1e-9
+    initial_samples = 100
+    convergence_tolerance = 1e-6
+    x_conv_tol = 1e-6
     max_iterations = 2000
-    seed = 123457
+    seed = 123456
     model_pointer = 'M1'
   output quiet
 
@@ -30,8 +30,8 @@ method
 method
   id_method = 'NLP'
   nl2sol
-    max_iterations = 100
-    convergence_tolerance = 1e-9
+    max_iterations = 2000
+    convergence_tolerance = 1e-6
     model_pointer = 'M2'
   scaling
   output debug
@@ -57,8 +57,8 @@ model
 variables
   id_variables 'V1'
   continuous_design = 4 #Design variables
-    lower_bounds    1.0   1.0e-3   1.0e-4    0
-    upper_bounds    10.0  1.0e-1   1.0e-1    2
+    lower_bounds    1.0   1.0e-3   1.0e-4  0.01
+    upper_bounds    10.0  1.0e-1   1.0e-1    2.0
     descriptors    'N'  'ksi'  'kappa'  'b'
     scale_types= 'auto' 'log' 'log' 'auto'
     #units NA MPa NA NA
@@ -68,7 +68,8 @@ interface
   id_interface = 'I1'
   fork
      analysis_driver = 'python3 calibration_eq_IT.py'
-
+  failure_capture
+     recover 100.0
 ### DEFINE THE RESPONSE VARIALES ####
 responses
   id_responses = 'R1'
@@ -104,5 +105,5 @@ responses
 #              'e202'
 #              'e203'
   numerical_gradients
-    fd_step_size = 0.1
+    fd_step_size = 0.001
   no_hessians
